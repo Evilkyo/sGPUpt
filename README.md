@@ -1,4 +1,4 @@
-# THIS IS A FORK OF https://github.com/lexi-src/sGPUpt THAT I've UPDATED for ARCH
+# THIS IS A FORK OF https://github.com/MaxxRK/sGPUpt THAT I've UPDATED for ARCH
 
 # sGPUpt
 sGPUpt is designed for desktop VFIO users looking to passthrough their only GPU.
