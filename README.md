@@ -23,7 +23,7 @@ sGPUpt is designed for desktop VFIO users looking to passthrough their only GPU.
 | Fedora (36,37)    |   ✔️   |
 | Nobara (37)       |   ✔️   |
 | AlmaLinux (9.1)   |   ✔️   |
-| Debian (any)      |   ❌   |
+| Debian (13)       |   ✔️   |
 | Ubuntu (22.04+)   |   ✔️   |
 | Kubuntu (22.04+)  |   ✔️   |
 | Pop!_OS (22.04)   |   ✔️   |
