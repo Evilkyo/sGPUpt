@@ -161,10 +161,18 @@ function query_system()
   vm_cores=$(($vm_cpus / vm_threads))
 
   # Stop the script if we have more than one GPU in the system.
-  [[ $(lspci | grep -c "VGA") -gt 1 ]] && logger error "There are too many GPUs in the system!"
-
+  #[[ $(lspci | grep -c "VGA") -gt 1 ]] && logger error "There are too many GPUs in the system!"
+  if [[ $(lspci | grep -c "VGA") -gt 1 ]]; then
+    logger info "There are too many GPUs in the system, please choose a gpu";
+    echo "$(lspci | grep "VGA" | grep -E "NVIDIA|AMD/ATI|Arc" | rev | cut -d"[" -f1 | cut -d"]" -f2 | rev)";
+    read -p 'GPU: ' gpu;
+    gpu_name=$(lspci | grep "VGA" | grep -E "NVIDIA|AMD/ATI|Arc" | rev | cut -d"[" -f1 | cut -d"]" -f2 | rev | grep "$gpu");
+  else
+    gpu_name=$(lspci | grep "VGA" | grep -E "NVIDIA|AMD/ATI|Arc" | rev | cut -d"[" -f1 | cut -d"]" -f2 | rev);
+  fi
+  
   # Get basic GPU information.
-  gpu_name=$(lspci | grep "VGA" | grep -E "NVIDIA|AMD/ATI|Arc" | rev | cut -d"[" -f1 | cut -d"]" -f2 | rev)
+  # gpu_name=$(lspci | grep "VGA" | grep -E "NVIDIA|AMD/ATI|Arc" | rev | cut -d"[" -f1 | cut -d"]" -f2 | rev)
   gpu_components=$(lspci | grep -E "NVIDIA|AMD/ATI|Arc" | grep -E -c "VGA|Audio|USB|Serial")
   case $gpu_name in
     *GeForce*|*NVIDIA*) gpu_brand="NVIDIA" ;;
@@ -288,16 +296,17 @@ function find_pcie_devices()
 function install_packages()
 {
   source /etc/os-release
-  arch_depends=(   "qemu-base" "virt-manager" "virt-viewer" "dnsmasq" "vde2" "bridge-utils" "openbsd-netcat" "libguestfs" "swtpm" "git" "make" "ninja" "nasm" "iasl" "pkg-config" "spice-protocol" "dmidecode" "gcc" "flex" "bison" "spice" )
+  arch_depends=(   "qemu-base" "virt-manager" "virt-viewer" "dnsmasq" "vde2" "bridge-utils" "openbsd-netcat" "libguestfs" "swtpm" "git" "make" "ninja" "nasm" "iasl" "pkg-config" "spice-protocol" "dmidecode" "gcc" "flex" "bison" "spice" "xkeyboard-config")
   fedora_depends=( "qemu-kvm" "virt-manager" "virt-viewer" "virt-install" "libvirt-daemon-config-network" "libvirt-daemon-kvm" "swtpm" "g++" "ninja-build" "nasm" "iasl" "libuuid-devel" "glib2-devel" "pixman-devel" "spice-protocol" "spice-server-devel" )
   alma_depends=(   "qemu-kvm" "virt-manager" "virt-viewer" "virt-install" "libvirt-daemon-config-network" "libvirt-daemon-kvm" "swtpm" "git" "make" "gcc" "g++" "ninja-build" "nasm" "iasl" "libuuid-devel" "glib2-devel" "pixman-devel" "spice-protocol" "spice-server-devel" )
-  debian_depends=( "qemu-kvm" "virt-manager" "virt-viewer" "libvirt-daemon-system" "libvirt-clients" "bridge-utils" "swtpm" "mesa-utils" "git" "ninja-build" "nasm" "iasl" "pkg-config" "libglib2.0-dev" "libpixman-1-dev" "meson" "build-essential" "uuid-dev" "python-is-python3" "libspice-protocol-dev" "libspice-server-dev" "flex" "bison" )
+  debian_depends=( "qemu-kvm" "virt-manager" "virt-viewer" "libvirt-daemon-system" "libvirt-clients" "bridge-utils" "swtpm" "mesa-utils" "git" "ninja-build" "nasm" "iasl" "pkg-config" "libglib2.0-dev" "libpixman-1-dev" "meson" "build-essential" "uuid-dev" "python-is-python3" "libspice-protocol-dev" "libspice-server-dev" "flex" "bison" "libusb-1.0-0-dev")
 
   ubuntu_version=( "22.04" "22.10" )
   mint_version=( "21.1" )
   pop_version=( "22.04" )
   alma_version=( "9.1" )
   fedora_version=( "36" "37" )
+  debian_version=( "13" )
   local re="\\b$VERSION_ID\\b"
 
   testVersions() {
@@ -317,6 +326,7 @@ function install_packages()
       "Ubuntu") arr=ubuntu ;;
       "Linux Mint") arr=mint ;;
       "Pop!_OS") arr=pop ;;
+      "Debian GNU/Linux") arr=debian ;;
     esac
     testVersions "$arr"
     apt install "${debian_depends[@]}" 2>&1 | tee -a "$log_file"
