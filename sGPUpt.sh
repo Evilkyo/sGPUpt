@@ -4,7 +4,7 @@ LANG=en_US.UTF-8
 # sGPUpt
 version="1.1.2"
 author="MaxxRK"
-mantainer="bhampthechamp"
+maintainer="bhampthechamp"
 tool="sGPUpt"
 
 # Colors
