@@ -2,8 +2,9 @@
 LANG=en_US.UTF-8
 
 # sGPUpt
-version="1.1.0"
-author="lexi-src"
+version="1.1.2"
+author="MaxxRK"
+mantainer="bhampthechamp"
 tool="sGPUpt"
 
 # Colors
@@ -48,9 +49,9 @@ log_hook="/etc/sGPUpt/sGPUpt-hooks.log"
 
 function header(){
   #TODO: parameterize offset width
-  url="https://github.com/$author/$tool"
+  url="https://github.com/$maintainer/$tool"
   rep="Report issues @ $url/issues"
-  tag="${RED}♥${DEFAULT} $tool made by $author ${RED}♥${DEFAULT}"
+  tag="${RED}♥${DEFAULT} $tool made by $author and updated by $maintainer ${RED}♥${DEFAULT}"
   blen=$(<<< $rep wc -m)
   row=$((blen+3))
   tlen=$(<<< $tag wc -m)
