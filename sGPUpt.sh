@@ -49,7 +49,8 @@ log_hook="/etc/sGPUpt/sGPUpt-hooks.log"
 
 function header(){
   #TODO: parameterize offset width
-  url="https://github.com/$maintainer/$tool"
+  url="https://github.com/$author/$tool"
+  url2="https://github.com/$maintainer/$tool"
   rep="Report issues @ $url/issues"
   tag="${RED}♥${DEFAULT} $tool made by $author and updated by $maintainer ${RED}♥${DEFAULT}"
   blen=$(<<< $rep wc -m)
@@ -166,7 +167,7 @@ function query_system()
   if [[ $(lspci | grep -c "VGA") -gt 1 ]]; then
     logger info "There are too many GPUs in the system, please choose a gpu";
     echo "$(lspci | grep "VGA" | grep -E "NVIDIA|AMD/ATI|Arc" | rev | cut -d"[" -f1 | cut -d"]" -f2 | rev)";
-    read -p 'GPU: ' gpu;
+    read -p 'Please select GPU from above [0=4]: ' gpu;
     gpu_name=$(lspci | grep "VGA" | grep -E "NVIDIA|AMD/ATI|Arc" | rev | cut -d"[" -f1 | cut -d"]" -f2 | rev | grep "$gpu");
   else
     gpu_name=$(lspci | grep "VGA" | grep -E "NVIDIA|AMD/ATI|Arc" | rev | cut -d"[" -f1 | cut -d"]" -f2 | rev);
