@@ -167,7 +167,7 @@ function query_system()
   if [[ $(lspci | grep -c "VGA") -gt 1 ]]; then
     logger info "There are too many GPUs in the system, please choose a gpu";
     echo "$(lspci | grep "VGA" | grep -E "NVIDIA|AMD/ATI|Arc" | rev | cut -d"[" -f1 | cut -d"]" -f2 | rev)";
-    read -p 'Please select GPU from above [0=4]: ' gpu;
+    read -p 'Please select GPU from above [0-4]: ' gpu;
     gpu_name=$(lspci | grep "VGA" | grep -E "NVIDIA|AMD/ATI|Arc" | rev | cut -d"[" -f1 | cut -d"]" -f2 | rev | grep "$gpu");
   else
     gpu_name=$(lspci | grep "VGA" | grep -E "NVIDIA|AMD/ATI|Arc" | rev | cut -d"[" -f1 | cut -d"]" -f2 | rev);
@@ -179,6 +179,7 @@ function query_system()
   case $gpu_name in
     *GeForce*|*NVIDIA*) gpu_brand="NVIDIA" ;;
     *Radeon*)           gpu_brand="AMD" ;;
+    *Raphael*)		logger error "AMD Integrated CPU Graphics are unspported.";;
     *Arc*)              logger error "Intel Arc is unsupported, please refer to ${url}#supported-hardware" ;;
     *)                  logger error "Unknown GPU" ;;
   esac
