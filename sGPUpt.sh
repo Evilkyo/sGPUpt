@@ -888,7 +888,7 @@ function stop_sh()
 		for usb in ${array_convt_usb[@]}; do
 		  echo -e "virsh nodedev-reattach pci_0000_$usb 2>&1 | tee -a \"\$log_hook\""
 		done >> "$vm_stop_hook"
-  	DOC
+  
   		if [[ $gpu_brand == "NVIDIA" ]]; then
 			cat <<- DOC >> "$vm_stop_hook"
 
