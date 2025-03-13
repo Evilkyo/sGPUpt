@@ -826,7 +826,7 @@ function start_sh()
 	cat <<- DOC >> "$vm_start_hook"
 		#!/bin/bash
   		# enable CMD debugging of script
-		set -x
+    		set -x
       		# send outputs to logfile
 		log_hook="$log_hook"
 
@@ -838,9 +838,9 @@ function start_sh()
 		if [[ $gpu_brand == "NVIDIA" ]]; then
 			cat <<- DOC >> "$vm_start_hook"
 				[[ -n \$(pgrep -x "nvidia") ]] && pkill -f nvidia 2>&1 | tee -a "\$log_hook"
-
-    				# Give time to Kill nvidia processes
-    				sleep 3
+    
+				# Give time to Kill nvidia processes
+				sleep 3
 
 				# Disconnect nvidia drivers
 				sudo rmmod nvidia_drm
