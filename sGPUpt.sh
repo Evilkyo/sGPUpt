@@ -825,6 +825,9 @@ function start_sh()
   > "$vm_start_hook"
 	cat <<- DOC >> "$vm_start_hook"
 		#!/bin/bash
+  		# enable CMD debugging of script
+		set -x
+      		# send outputs to logfile
 		log_hook="$log_hook"
 
 		systemctl stop display-manager 2>&1 | tee -a "\$log_hook"
@@ -836,6 +839,14 @@ function start_sh()
 			cat <<- DOC >> "$vm_start_hook"
 				[[ -n \$(pgrep -x "nvidia") ]] && pkill -f nvidia 2>&1 | tee -a "\$log_hook"
 
+    				# Give time to Kill nvidia processes
+    				sleep 3
+
+				# Disconnect nvidia drivers
+				sudo rmmod nvidia_drm
+				sudo rmmod nvidia_uvm
+				sudo rmmod nvidia_modeset
+				sudo rmmod nvidia 
 			DOC
 		fi
 
@@ -866,6 +877,7 @@ function stop_sh()
   > "$vm_stop_hook"
 	cat <<- DOC >> "$vm_stop_hook"
 		#!/bin/bash
+  		set -x
 		log_hook="$log_hook"
 
 	DOC
@@ -876,8 +888,19 @@ function stop_sh()
 		for usb in ${array_convt_usb[@]}; do
 		  echo -e "virsh nodedev-reattach pci_0000_$usb 2>&1 | tee -a \"\$log_hook\""
 		done >> "$vm_stop_hook"
-	cat <<- DOC >> "$vm_stop_hook"
+  	DOC
+  		if [[ $gpu_brand == "NVIDIA" ]]; then
+			cat <<- DOC >> "$vm_stop_hook"
 
+				# reload nvidia drivers
+				modprobe nvidia
+				modprobe nvidia_modeset
+				modprobe nvidia_uvm
+				modprobe nvidia_drm
+			DOC
+		fi
+	cat <<- DOC >> "$vm_stop_hook"
+	
 		systemctl start display-manager 2>&1 | tee -a "\$log_hook"
 
 		systemctl set-property --runtime -- user.slice AllowedCPUs=$all_cpu_groups
