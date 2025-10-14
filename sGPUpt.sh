@@ -1,7 +1,7 @@
 !/bin/bashLANG=en_US.UTF-8
 
 # sGPUpt
-version="1.1.2"
+version="1.1.3"
 author="MaxxRK"
 maintainer="bhampthechamp"
 tool="sGPUpt"
@@ -30,9 +30,9 @@ iso_path="/etc/sGPUpt/iso"
 #iso_path=/home/$SUDO_USER/Documents/iso
 
 # Compile
-qemu_branch="v9.2.2"
+qemu_branch="v9.2.4"
 qemu_dir="/etc/sGPUpt/qemu-emulator"
-edk2_branch="edk2-stable202502"
+edk2_branch="edk2-stable202508"
 edk2_dir="/etc/sGPUpt/edk-compile"
 
 # Urls
