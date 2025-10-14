@@ -30,7 +30,7 @@ iso_path="/etc/sGPUpt/iso"
 #iso_path=/home/$SUDO_USER/Documents/iso
 
 # Compile
-qemu_branch="v9.2.4"
+qemu_branch="v10.1.1"
 qemu_dir="/etc/sGPUpt/qemu-emulator"
 edk2_branch="edk2-stable202508"
 edk2_dir="/etc/sGPUpt/edk-compile"
