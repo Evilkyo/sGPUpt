@@ -32,12 +32,12 @@ iso_path="/etc/sGPUpt/iso"
 # Compile
 qemu_branch="v10.1.1"
 qemu_dir="/etc/sGPUpt/qemu-emulator"
-edk2_branch="edk2-stable202508"
+edk2_branch="teste"
 edk2_dir="/etc/sGPUpt/edk-compile"
 
 # Urls
 qemu_git="https://github.com/qemu/qemu.git"
-edk2_git="https://github.com/tianocore/edk2.git"
+edk2_git="https://github.com/Evilkyo/edk2.git"
 virtIO_url="https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso"
 
 # Logs
@@ -298,7 +298,7 @@ function find_pcie_devices()
 function install_packages()
 {
   source /etc/os-release
-  arch_depends=(   "qemu-base" "virt-manager" "virt-viewer" "dnsmasq" "vde2" "bridge-utils" "openbsd-netcat" "libguestfs" "swtpm" "git" "make" "ninja" "nasm" "iasl" "pkg-config" "spice-protocol" "dmidecode" "gcc" "flex" "bison" "spice" "xkeyboard-config" "wget")
+  arch_depends=(   "qemu-base" "virt-manager" "virt-viewer" "dnsmasq" "vde2" "bridge-utils" "openbsd-netcat" "libguestfs" "swtpm" "git" "make" "ninja" "iasl" "pkg-config" "spice-protocol" "dmidecode" "gcc" "flex" "bison" "spice" "xkeyboard-config" "wget")
   fedora_depends=( "qemu-kvm" "virt-manager" "virt-viewer" "virt-install" "libvirt-daemon-config-network" "libvirt-daemon-kvm" "swtpm" "g++" "ninja-build" "nasm" "iasl" "libuuid-devel" "glib2-devel" "pixman-devel" "spice-protocol" "spice-server-devel" )
   alma_depends=(   "qemu-kvm" "virt-manager" "virt-viewer" "virt-install" "libvirt-daemon-config-network" "libvirt-daemon-kvm" "swtpm" "git" "make" "gcc" "g++" "ninja-build" "nasm" "iasl" "libuuid-devel" "glib2-devel" "pixman-devel" "spice-protocol" "spice-server-devel" )
   debian_depends=( "qemu-kvm" "virt-manager" "virt-viewer" "libvirt-daemon-system" "libvirt-clients" "bridge-utils" "swtpm" "mesa-utils" "git" "ninja-build" "nasm" "iasl" "pkg-config" "libglib2.0-dev" "libpixman-1-dev" "meson" "build-essential" "uuid-dev" "python-is-python3" "libspice-protocol-dev" "libspice-server-dev" "flex" "bison" "libusb-1.0-0-dev")
@@ -622,7 +622,7 @@ function create_vm()
   --memballoon model=none \
   --tpm model=tpm-crb,type=emulator,version=2.0 \
   --qemu-commandline="-cpu" \
-  --qemu-commandline="host,hv_time,hv_relaxed,hv_vapic,hv_spinlocks=8191,hv_vpindex,hv_reset,hv_synic,hv_stimer,hv_frequencies,hv_reenlightenment,hv_tlbflush,hv_ipi,kvm=off,kvm-hint-dedicated=on,-hypervisor,$cpu_features" \
+  --qemu-commandline="host,hv_time,hv_runtime,hv_relaxed,hv_vapic,hv_avic,hv_spinlocks=8191,hv_vpindex,hv_reset,hv_synic,hv_stimer,hv_frequencies,hv_reenlightenment,hv_tlbflush,hv_ipi,kvm=off,kvm-hint-dedicated=on,-hypervisor,$cpu_features" \
   >> "$log_file" 2>&1
 
   # If virt-install fails throw an error
